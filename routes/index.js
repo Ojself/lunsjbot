@@ -10,7 +10,7 @@ const sendToSlackChannel = async (blocks) => {
   try {
     await Axios.post(process.env.SLACK_WEBHOOK_URL, { blocks });
   } catch (err) {
-    console.err(err);
+    console.warn(err);
   }
 };
 
