@@ -75,7 +75,7 @@ const generateResponse = (menu) => {
         type: "mrkdwn",
         text: `*${dish.name}*\n${getEmojis(dish)} _${
           dish.category.name
-        }_ \n<https://Ojself.github.io/lunsjbot|Allergener>`,
+        }_ \n<https://ojself.github.io/lunsjbotinnhold|Allergener>`,
       },
     };
     return block;
