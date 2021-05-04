@@ -89,8 +89,13 @@ const generateResponse = (menu) => {
   return [generalInfo, divider, ...menuOverview, divider, githubInfo];
 };
 
-router.get("/", async (req, res) => {
-  //authenticate
+router.post("/", async (req, res) => {
+  // simple and unsafe auth
+  const { lunsj_secret } = req.body;
+  if (!lunsj_secret || lunsj_secret !== process.env.LUNSJ_SECRET) {
+    console.info("Failed auth");
+    return res.send("Sent");
+  }
   const result = await Axios(axiosConfig);
   const todaysMenu = result.data.data[0].availability[0].dishes;
   if (!todaysMenu) {
@@ -101,6 +106,7 @@ router.get("/", async (req, res) => {
   res.send("Sent");
 });
 
+// no auth
 router.get("/menu", async (req, res) => {
   const result = await Axios(axiosConfig);
   const menu = result.data.data[0].availability[0].dishes;
