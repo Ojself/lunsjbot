@@ -91,10 +91,26 @@ const generateResponse = (menu) => {
 
   return [generalInfo, divider, ...menuOverview, divider, githubInfo];
 };
+/* 
+// yikes
+const determineIfSameDay = (response) => {
+  const today = new Date();
+  const dd = String(today.getDate()).padStart(2, "0");
+  const responseDate = result.data.data[0].availability[0].period_start.split(
+    "T"
+  );
+  const responseDateEnd = `${responseDate[0][responseDate[0].length - 2]}${
+    responseDate[0][responseDate[0].length - 1]
+  }`;
+  const x = dd === responseDateEnd ? 0 : 1;
+  console.log(x);
+  return x;
+}; */
 
 const sendTodaysMenu = async () => {
   const result = await Axios(axiosConfig);
-  const todaysMenu = result.data.data[0].availability[0].dishes;
+  //const correctPosition = determineIfSameDay();
+  const todaysMenu = result.data.data[0].availability[1].dishes;
   if (!todaysMenu) {
     throw new Error("Something went wrong");
   }
