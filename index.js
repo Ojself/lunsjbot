@@ -91,26 +91,25 @@ const generateResponse = (menu) => {
 
   return [generalInfo, divider, ...menuOverview, divider, githubInfo];
 };
-/* 
+
 // yikes
-const determineIfSameDay = (response) => {
+// Checks if the first element of the response is the same
+const determineIfSameDay = (availability) => {
   const today = new Date();
   const dd = String(today.getDate()).padStart(2, "0");
-  const responseDate = result.data.data[0].availability[0].period_start.split(
-    "T"
-  );
+  const responseDate = availability[0].period_start.split("T");
   const responseDateEnd = `${responseDate[0][responseDate[0].length - 2]}${
     responseDate[0][responseDate[0].length - 1]
   }`;
-  const x = dd === responseDateEnd ? 0 : 1;
-  console.log(x);
-  return x;
-}; */
+  return dd === responseDateEnd ? 0 : 1;
+};
 
 const sendTodaysMenu = async () => {
   const result = await Axios(axiosConfig);
-  //const correctPosition = determineIfSameDay();
-  const todaysMenu = result.data.data[0].availability[1].dishes;
+  // available dishes
+  const { availability } = result.data.data[0];
+  const indexPosition = determineIfSameDay(availability);
+  const todaysMenu = availability[indexPosition].dishes;
   if (!todaysMenu) {
     throw new Error("Something went wrong");
   }
