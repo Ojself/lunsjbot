@@ -97,11 +97,9 @@ const generateResponse = (menu) => {
 const determineIfSameDay = (availability) => {
   const today = new Date();
   const dd = String(today.getDate()).padStart(2, "0");
-  const responseDate = availability[0].period_start.split("T");
-  const responseDateEnd = `${responseDate[0][responseDate[0].length - 2]}${
-    responseDate[0][responseDate[0].length - 1]
-  }`;
-  return dd === responseDateEnd ? 0 : 1;
+  const responseDate = availability[0].period_start.split("T")[0].slice(-2);
+
+  return dd === responseDate ? 0 : 1;
 };
 
 const sendTodaysMenu = async () => {
