@@ -85,7 +85,7 @@ const generateResponse = (menu) => {
     type: "section",
     text: {
       type: "mrkdwn",
-      text: `Lunsjbot er <https://github.com/Ojself/lunsjbotinnhold|open source>`,
+      text: `Lunsjbot er <https://github.com/Ojself/lunsjbot|open source>`,
     },
   };
 
@@ -115,4 +115,5 @@ const sendTodaysMenu = async () => {
   sendToSlackChannel(blocks);
 };
 
+// node index.js
 sendTodaysMenu();
