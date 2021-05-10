@@ -17,14 +17,13 @@ const sendToSlackChannel = async (blocks) => {
   }
 };
 
-const getRandomElementFromArray = (array) => {
-  return array[Math.floor(Math.random() * array.length)];
-};
+const getRandomElementFromArray = (array) =>
+  array[Math.floor(Math.random() * array.length)];
 
 const getEmojis = (dish, amount = 3) => {
   const emojis = new Set();
 
-  for (const word of dish.name.split(" ")) {
+  dish.name.split(" ").forEach((word) => {
     const wordLow = word.toLowerCase();
     if (Object.keys(foodEmojis).includes(wordLow) && emojis.size < amount) {
       emojis.add(
@@ -33,7 +32,7 @@ const getEmojis = (dish, amount = 3) => {
           : foodEmojis[wordLow]
       );
     }
-  }
+  });
 
   // Adds general emojis if specific ones are not found
   while (emojis.size < amount) {
@@ -92,22 +91,22 @@ const generateResponse = (menu) => {
   return [generalInfo, divider, ...menuOverview, divider, githubInfo];
 };
 
-// yikes
-// Checks if the first element of the response is the same
-const determineIfSameDay = (availability) => {
+// Looks for the correct index based on date
+const getDateIndex = (availability) => {
   const today = new Date();
-  const dd = String(today.getDate()).padStart(2, "0");
-  const responseDate = availability[0].period_start.split("T")[0].slice(-2);
-
-  return dd === responseDate ? 0 : 1;
+  const dd = String(today.getDate()).padStart(2, "0"); // "24"
+  return availability.findIndex((dayMenu) => {
+    const date = dayMenu.period_start.split("T")[0].slice(-2);
+    return dd === date;
+  });
 };
 
 const sendTodaysMenu = async () => {
   const result = await Axios(axiosConfig);
   // available dishes
   const { availability } = result.data.data[0];
-  const indexPosition = determineIfSameDay(availability);
-  const todaysMenu = availability[indexPosition].dishes;
+  const index = getDateIndex(availability);
+  const todaysMenu = availability[index].dishes;
   if (!todaysMenu) {
     throw new Error("Something went wrong");
   }
@@ -115,5 +114,4 @@ const sendTodaysMenu = async () => {
   sendToSlackChannel(blocks);
 };
 
-// node index.js
 sendTodaysMenu();
