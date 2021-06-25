@@ -6,6 +6,7 @@
   "asia": "🌏",
   "asiatisk": "🌏",
   "aspargessuppe": "🥣",
+  "aubergin": "🍆",
   "avokado": "🥑",
   "bacon": "🥓",
   "bagel": "🥯",
@@ -43,6 +44,7 @@
   "fisk": ["🐠", "🐟"],
   "fiskegrateng": ["🐠", "🐟"],
   "fiskekake": "🍥",
+  "fiskesuppe": ["🐠", "🐟"],
   "flatbrød": "🫓",
   "florentine": "🐟",
   "fransk": "🇫🇷",
@@ -149,5 +151,6 @@
   "urtekrydret": "🌿",
   "vaffel": "🧇",
   "vannameireker": "🦐",
-  "vegetar": ["🌱", "🍠", "🌽"]
+  "vegetar": ["🌱", "🍠", "🌽"],
+  "vegetarpizza": "🍕"
 }
