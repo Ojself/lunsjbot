@@ -24,7 +24,7 @@ const getEmojis = (dish, amount = 3) => {
   const emojis = new Set();
 
   dish.name.split(" ").forEach((word) => {
-    const wordLow = word.toLowerCase();
+    const wordLow = word.toLowerCase().replace(/[^a-z|æøå]/g, "");
     if (Object.keys(foodEmojis).includes(wordLow) && emojis.size < amount) {
       emojis.add(
         Array.isArray(foodEmojis[wordLow])
