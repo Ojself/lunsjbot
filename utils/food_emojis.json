@@ -37,6 +37,7 @@
   "carne": "🥘",
   "cheeseburger": "🍔",
   "cheddar": "🧀",
+  "chevre": "🧀",
   "chili": "🌶",
   "chilimajones": "🌶",
   "chilipepper": "🌶",
@@ -184,6 +185,8 @@
   "tyrkisk": "🇹🇷",
   "urtekrydret": "🌿",
   "vaffel": "🧇",
+  "valnøtt": "🥜",
+  "valnøtter": "🥜",
   "vannameireker": "🦐",
   "vegetar": ["🌱", "🍠", "🌽"],
   "vegetarpizza": "🍕"
