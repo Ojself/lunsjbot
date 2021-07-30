@@ -20,12 +20,24 @@ const sendToSlackChannel = async (blocks) => {
 const getRandomElementFromArray = (array) =>
   array[Math.floor(Math.random() * array.length)];
 
-const getEmojis = (dish, amount = 3) => {
+const getEmojis = (dish, maxAmountEmojis = 3) => {
   const emojis = new Set();
+  const splittedDish = dish.name.split(" ");
 
-  dish.name.split(" ").forEach((word) => {
+  // Exception for pølsefest as dish. returns -> "🌭🌭🌭"
+  if (
+    splittedDish.length === 1 &&
+    splittedDish[0].toLowerCase() === "pølsefest"
+  ) {
+    return foodEmojis["pølse"].repeat(3);
+  }
+
+  splittedDish.forEach((word) => {
     const wordLow = word.toLowerCase().replace(/[^a-z|æøå]/g, "");
-    if (Object.keys(foodEmojis).includes(wordLow) && emojis.size < amount) {
+    if (
+      Object.keys(foodEmojis).includes(wordLow) &&
+      emojis.size < maxAmountEmojis
+    ) {
       emojis.add(
         Array.isArray(foodEmojis[wordLow])
           ? getRandomElementFromArray(foodEmojis[wordLow])
@@ -35,7 +47,7 @@ const getEmojis = (dish, amount = 3) => {
   });
 
   // Adds general emojis if specific ones are not found
-  while (emojis.size < amount) {
+  while (emojis.size < maxAmountEmojis) {
     emojis.add(getRandomElementFromArray(categoryEmojis[dish.category.name]));
   }
   return Array.from(emojis).join(" ");
