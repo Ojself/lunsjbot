@@ -17,8 +17,9 @@ const sendToSlackChannel = async (blocks) => {
   }
 };
 
-const getRandomElementFromArray = (array) =>
-  array[Math.floor(Math.random() * array.length)];
+const getRandomElementFromArray = (array) =>{
+  return array[Math.floor(Math.random() * array.length)];
+}
 
 const getEmojis = (dish, maxAmountEmojis = 3) => {
   const emojis = new Set();
