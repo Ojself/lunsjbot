@@ -97,7 +97,7 @@ const generateResponse = (menu) => {
     type: "section",
     text: {
       type: "mrkdwn",
-      text: `Lunsjbot er <https://github.com/Ojself/lunsjbot|open source>`,
+      text: `Dagens fun fact: Jonas E.C. vet ikke hva risotto er.`,
     },
   };
 
