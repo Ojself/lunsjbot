@@ -3,6 +3,7 @@ const Axios = require("axios");
 
 const axiosConfig = require("./utils/axiosConfig");
 const foodEmojis = require("./utils/food_emojis.json");
+const foodEmojiKeys = Object.keys(foodEmojis);
 const categoryEmojis = require("./utils/category_emojis.json");
 
 const sendToSlackChannel = async (blocks) => {
@@ -32,13 +33,11 @@ const getEmojis = (dish, maxAmountEmojis = 3) => {
   ) {
     return foodEmojis["pølse"].repeat(3);
   }
-
   splittedDish.forEach((word) => {
-    console.log("word.lowervase()",word.toLowerCase())
+    
     const wordLow = word.toLowerCase().replace(/[^a-z|æøå|éèáà]/g, "");
-    console.log({wordLow})
     if (
-      Object.keys(foodEmojis).includes(wordLow) &&
+      foodEmojiKeys.includes(wordLow) &&
       emojis.size < maxAmountEmojis
     ) {
       emojis.add(
@@ -79,9 +78,7 @@ const generateResponse = (menu) => {
     },
   };
 
-  const divider = {
-    type: "divider",
-  };
+  const divider = {type: "divider"};
   const menuOverview = menu.map((dish) => {
     const block = {
       type: "section",
@@ -126,8 +123,7 @@ const sendTodaysMenu = async () => {
     throw new Error("Something went wrong");
   }
   const blocks = generateResponse(todaysMenu);
-  console.log(blocks)
-  //sendToSlackChannel(blocks);
+  sendToSlackChannel(blocks);
 };
 
 sendTodaysMenu();
