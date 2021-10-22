@@ -34,7 +34,9 @@ const getEmojis = (dish, maxAmountEmojis = 3) => {
   }
 
   splittedDish.forEach((word) => {
-    const wordLow = word.toLowerCase().replace(/[^a-z|æøå]/g, "");
+    console.log("word.lowervase()",word.toLowerCase())
+    const wordLow = word.toLowerCase().replace(/[^a-z|æøå|éèáà]/g, "");
+    console.log({wordLow})
     if (
       Object.keys(foodEmojis).includes(wordLow) &&
       emojis.size < maxAmountEmojis
@@ -124,7 +126,8 @@ const sendTodaysMenu = async () => {
     throw new Error("Something went wrong");
   }
   const blocks = generateResponse(todaysMenu);
-  sendToSlackChannel(blocks);
+  console.log(blocks)
+  //sendToSlackChannel(blocks);
 };
 
 sendTodaysMenu();
