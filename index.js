@@ -18,9 +18,9 @@ const sendToSlackChannel = async (blocks) => {
   }
 };
 
-const getRandomElementFromArray = (array) =>{
+const getRandomElementFromArray = (array) => {
   return array[Math.floor(Math.random() * array.length)];
-}
+};
 
 const getEmojis = (dish, maxAmountEmojis = 3) => {
   const emojis = new Set();
@@ -34,12 +34,8 @@ const getEmojis = (dish, maxAmountEmojis = 3) => {
     return foodEmojis["pølse"].repeat(3);
   }
   splittedDish.forEach((word) => {
-    
     const wordLow = word.toLowerCase().replace(/[^a-z|æøå|éèáà]/g, "");
-    if (
-      foodEmojiKeys.includes(wordLow) &&
-      emojis.size < maxAmountEmojis
-    ) {
+    if (foodEmojiKeys.includes(wordLow) && emojis.size < maxAmountEmojis) {
       emojis.add(
         Array.isArray(foodEmojis[wordLow])
           ? getRandomElementFromArray(foodEmojis[wordLow])
@@ -78,7 +74,7 @@ const generateResponse = (menu) => {
     },
   };
 
-  const divider = {type: "divider"};
+  const divider = { type: "divider" };
   const menuOverview = menu.map((dish) => {
     const block = {
       type: "section",
