@@ -34,7 +34,7 @@ const getEmojis = (dish, maxAmountEmojis = 3) => {
     return foodEmojis["pølse"].repeat(3);
   }
   splittedDish.forEach((word) => {
-    const wordLow = word.toLowerCase().replace(/[^a-z|æøå|éèáà]/g, "");
+    const wordLow = word.toLowerCase().replace(/[^a-z|æøå|éèáà|äöë]/g, "");
     if (foodEmojiKeys.includes(wordLow) && emojis.size < maxAmountEmojis) {
       emojis.add(
         Array.isArray(foodEmojis[wordLow])

@@ -317,6 +317,7 @@
   "tropisk": "🏝",
   "trøffelhonning": "🍯",
   "tyrkisk": "🇹🇷",
+  "tynnbrød": ["🥪", "🥖"],
   "urtekrydret": "🌿",
   "urtedressing": "🌿",
   "vaffel": "🧇",
@@ -330,5 +331,6 @@
   "vegetar": ["🌱", "🍠", "🌽"],
   "vegetarisk": ["🌱", "🍠", "🌽"],
   "vegetarpizza": "🍕",
+  "västerbottenost": "🧀",
   "vårrull": "🇻🇳"
 }
