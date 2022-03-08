@@ -18,9 +18,7 @@ router.get("/menu", async (req, res) => {
   if (!menu) {
     throw new Error("Something went wrong");
   }
-  res.status(200).json({
-    menu,
-  });
+  res.status(200).json({ menu });
 });
 
 module.exports = router;
