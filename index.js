@@ -1,6 +1,8 @@
 require("dotenv").config();
 const Axios = require("axios");
 
+const scrapeTullin = require("./utils/scrapeTullin");
+
 const axiosConfig = require("./utils/axiosConfig");
 const foodEmojis = require("./utils/food_emojis.json");
 const foodEmojiKeys = Object.keys(foodEmojis);
@@ -10,7 +12,7 @@ const sendToSlackChannel = async (blocks) => {
   try {
     await Axios.post(process.env.SLACK_WEBHOOK_URL, {
       channel: "lunsj",
-      text: "Dagens lunsj - Sundtkvartalet",
+      text: "Dagens lunsj - Smaus",
       blocks,
     });
   } catch (err) {
@@ -24,7 +26,7 @@ const getRandomElementFromArray = (array) => {
 
 const getEmojis = (dish, maxAmountEmojis = 3) => {
   const emojis = new Set();
-  const splittedDish = dish.name.split(" ");
+  const splittedDish = dish.split(" ");
 
   // Exception for pølsefest as dish. returns -> "🌭🌭🌭"
   if (
@@ -46,12 +48,13 @@ const getEmojis = (dish, maxAmountEmojis = 3) => {
 
   // Adds general emojis if specific ones are not found
   while (emojis.size < maxAmountEmojis) {
-    emojis.add(getRandomElementFromArray(categoryEmojis[dish.category.name]));
+    const category = dish?.category?.name ? dish.category.name : "variousFood";
+    emojis.add(getRandomElementFromArray(categoryEmojis[category]));
   }
   return Array.from(emojis).join(" ");
 };
 
-const generateResponse = (menu) => {
+const generateSundtResponse = (menu) => {
   /* "accessory": {
     "type": "image",
     "image_url": "https://s3-media3.fl.yelpcdn.com/bphoto/c7ed05m9lC2EmA3Aruue7A/o.jpg",
@@ -80,7 +83,7 @@ const generateResponse = (menu) => {
       type: "section",
       text: {
         type: "mrkdwn",
-        text: `*${dish.name}*\n${getEmojis(dish)} _${
+        text: `*${dish.name}*\n${getEmojis(dish.name)} _${
           dish.category.name
         }_ \n<https://ojself.github.io/lunsjbotinnhold|Allergener>`,
       },
@@ -99,6 +102,45 @@ const generateResponse = (menu) => {
   return [generalInfo, divider, ...menuOverview, divider, githubInfo];
 };
 
+const generateSmausResponse = (menu) => {
+  const date = new Date();
+  const dd = String(date.getDate()).padStart(2, "0");
+  const mm = String(date.getMonth() + 1).padStart(2, "0");
+
+  const today = dd + "/" + mm;
+
+  const generalInfo = {
+    type: "header",
+    text: {
+      type: "plain_text",
+      text: `(${today}) Dagens meny - Smaus `,
+      emoji: false,
+    },
+  };
+
+  const divider = { type: "divider" };
+  const menuOverview = menu.map((dish) => {
+    const block = {
+      type: "section",
+      text: {
+        type: "mrkdwn",
+        text: `*${dish}*\n${getEmojis(dish)} _${dish}_`,
+      },
+    };
+    return block;
+  });
+
+  const githubInfo = {
+    type: "section",
+    text: {
+      type: "mrkdwn",
+      text: "Lunsjbot is highly experimental and <https://github.com/Ojself/lunsjbot|open source>",
+    },
+  };
+
+  return [generalInfo, divider, ...menuOverview, divider, githubInfo];
+};
+
 // Looks for the correct index based on date
 const getDateIndex = (availability) => {
   const today = new Date();
@@ -109,7 +151,7 @@ const getDateIndex = (availability) => {
   });
 };
 
-const sendTodaysMenu = async () => {
+const sendTodaysMenuTullin = async () => {
   const result = await Axios(axiosConfig);
   // available dishes
   const { availability } = result.data.data[0];
@@ -118,8 +160,28 @@ const sendTodaysMenu = async () => {
   if (!todaysMenu) {
     throw new Error("Something went wrong");
   }
-  const blocks = generateResponse(todaysMenu);
+  const blocks = generateSundtResponse(todaysMenu);
   sendToSlackChannel(blocks);
 };
 
-sendTodaysMenu();
+const sendTodaysMenuSmaus = async () => {
+  const result = await scrapeTullin();
+  const todaysWeekdayIndex = new Date().getDay() - 1;
+
+  const todaysMenu = result[todaysWeekdayIndex];
+  if (!todaysMenu) {
+    console.warn("Something went wrong");
+    return;
+  }
+
+  const sanitizedMenu = todaysMenu.map((dish) => {
+    // remove all "/n" from string
+    const withOutCarriage = dish.replace(/(\r\n|\n|\r)/gm, "");
+    return withOutCarriage;
+  });
+
+  const blocks = generateSmausResponse(sanitizedMenu);
+  console.log(blocks);
+  //sendToSlackChannel(blocks);
+};
+sendTodaysMenuSmaus();

@@ -5,7 +5,6 @@ It will send a message every morning with todays lunch, provided by the office-a
 
 <img alt="Lunsjbot" src="screenshot.png" />
 
-Todos:
+##### Disclaimer
 
-- Add images
-- Add more emojis..
+Little to no effort was put into coding principles ✌️
