@@ -1,12 +1,13 @@
 require("dotenv").config();
 const Axios = require("axios");
+const { CronJob } = require("cron");
 
 const scrapeTullin = require("./utils/scrapeTullin");
-
 const axiosConfig = require("./utils/axiosConfig");
 const foodEmojis = require("./utils/food_emojis.json");
 const foodEmojiKeys = Object.keys(foodEmojis);
 const categoryEmojis = require("./utils/category_emojis.json");
+const timeZone = "Europe/Oslo";
 
 const sendToSlackChannel = async (blocks) => {
   try {
@@ -124,7 +125,7 @@ const generateSmausResponse = (menu) => {
       type: "section",
       text: {
         type: "mrkdwn",
-        text: `*${dish}*\n${getEmojis(dish)} _${dish}_`,
+        text: `*${dish}*\n${getEmojis(dish)}`,
       },
     };
     return block;
@@ -134,7 +135,7 @@ const generateSmausResponse = (menu) => {
     type: "section",
     text: {
       type: "mrkdwn",
-      text: "Lunsjbot is highly experimental and <https://github.com/Ojself/lunsjbot|open source>",
+      text: "Lunsjbot is experimental and <https://github.com/Ojself/lunsjbot|open source>",
     },
   };
 
@@ -181,7 +182,20 @@ const sendTodaysMenuSmaus = async () => {
   });
 
   const blocks = generateSmausResponse(sanitizedMenu);
-  console.log(blocks);
-  //sendToSlackChannel(blocks);
+
+  sendToSlackChannel(blocks);
 };
 sendTodaysMenuSmaus();
+
+/* const sendTodaysMenuSmausJob = new CronJob(
+  "30 * * * * *",
+  () => {
+    console.info("sendTodaysMenuSmausJob started");
+    sendTodaysMenuSmaus();
+  },
+  null,
+  true,
+  timeZone
+);
+
+sendTodaysMenuSmausJob.start() */
